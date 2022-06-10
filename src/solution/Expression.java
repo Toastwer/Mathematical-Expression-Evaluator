@@ -45,16 +45,16 @@ public class Expression {
     }
 
     private double executeInput(int lowerBound, int upperBound) throws InvalidExpressionException {
-        Stack<Integer> newLower = new Stack<>();
+        Stack<Integer> newLowerBound = new Stack<>();
         for (int i = lowerBound; i < upperBound; i++) {
             Token token = expression[i];
             if (!(token instanceof OperatorToken operatorToken))
                 continue;
 
             if (operatorToken.isOperator(Operator.LEFT_PARENTHESES)) {
-                newLower.add(i);
+                newLowerBound.add(i);
             } else if (operatorToken.isOperator(Operator.RIGHT_PARENTHESES)) {
-                int leftBracketPos = newLower.pop();
+                int leftBracketPos = newLowerBound.pop();
 
                 executeInput(leftBracketPos + 1, i);
 
@@ -94,7 +94,7 @@ public class Expression {
 
     private double getAndRemoveLeft(int relative) throws InvalidExpressionException {
         for (int i = relative; i >= 0; i--) {
-            if (expression[i] != null && expression[i] instanceof ValueToken valueToken) {
+            if (expression[i] instanceof ValueToken valueToken) {
                 double value = valueToken.getValue();
                 expression[i] = null;
                 return value;
@@ -106,7 +106,7 @@ public class Expression {
 
     private double getAndRemoveRight(int relative) throws InvalidExpressionException {
         for (int i = relative; i < expression.length; i++) {
-            if (expression[i] != null && expression[i] instanceof ValueToken valueToken) {
+            if (expression[i] instanceof ValueToken valueToken) {
                 double value = valueToken.getValue();
                 expression[i] = null;
                 return value;
@@ -119,7 +119,7 @@ public class Expression {
 
     private double getRight(int relative) throws InvalidExpressionException {
         for (int i = relative; i < expression.length; i++) {
-            if (expression[i] != null && expression[i] instanceof ValueToken valueToken) {
+            if (expression[i] instanceof ValueToken valueToken) {
                 return valueToken.getValue();
             }
         }
@@ -129,7 +129,7 @@ public class Expression {
 
     private void negateRight(int relative) throws InvalidExpressionException {
         for (int i = relative; i < expression.length; i++) {
-            if (expression[i] != null && expression[i] instanceof ValueToken valueToken) {
+            if (expression[i] instanceof ValueToken valueToken) {
                 valueToken.negate();
                 return;
             }
